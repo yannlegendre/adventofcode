@@ -4,6 +4,7 @@ describe 'ADVENT OF CODE 2021' do
   EXPECTATIONS = {
     '1' => [7, 5],
     '2' => [150, 900],
+    '3' => [198, 230],
     }
 
   EXPECTATIONS.each do |day, expected_result|
