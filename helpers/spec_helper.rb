@@ -2,8 +2,8 @@ require 'rspec'
 path = File.join(__dir__, '../*/scripts', '*.rb')
 Dir[path].each { require_relative _1 }
 
-shared_examples 'Running tests...' do |year, day, expected_result|
-  it "#{day} works" do
+shared_examples 'Running tests...' do |year, day, expected_result, focus|
+  it "#{day} works", focus: focus do
     klass = Object.const_get("Y#{year}Day#{day}")
     expect(klass.new(year, spec: true).part1).to eq expected_result.first
     expect(klass.new(year, spec: true).part2).to eq expected_result.last
