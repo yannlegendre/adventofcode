@@ -3,17 +3,19 @@ require 'awesome_print'
 require 'pry'
 
 class Day
-  attr_reader :year, :spec
-  def initialize(year, spec: false)
+  attr_reader :spec
+  def initialize(spec: false)
     @spec = spec
-    @year = year
   end
 
   private
+  def self.year
+    name.slice(1..4).to_i
+  end
 
   def file_path
     file_name = "#{self.class.name.slice(8..)}.txt"
-    "#{year}/#{spec ? "spec/" : "/"}input/#{file_name}"
+    "#{self.class.year}/#{spec ? "spec/" : "/"}input/#{file_name}"
   end
 
   def data
