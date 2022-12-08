@@ -50,11 +50,7 @@ class Y2022Day7 < Day
           current_directory =
             if argument == '..'
               dir = File.dirname(current_directory)
-              if dir == '.'
-                '/'
-              else
-                dir
-              end
+              dir = dir == '.' ?  '/' : dir
             else
               path = File.join(current_directory, argument)
               next unless directories.key?(path)
