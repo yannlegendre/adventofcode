@@ -9,8 +9,10 @@ shared_examples 'Running tests...' do |year, day, expected_result, focus|
     expect(klass.new(spec: true).part2).to eq expected_result.last
 
     puts klass.name.slice(5..)
-    puts "Part 1: #{klass.new.part1}"
-    puts "Part 2: #{klass.new.part2}"
+    puts 'Part 1:'
+    puts klass.new.part1
+    puts 'Part 2:'
+    puts klass.new.part2
     puts
   end
 end
