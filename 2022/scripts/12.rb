@@ -15,7 +15,7 @@ class Y2022Day12 < Day
   end
 
   def part2
-    # dijkstra(start, fin) => { prev:, dist: }
+    dijkstra(fin, nil, part2: true)
   end
 
   private
@@ -47,7 +47,7 @@ class Y2022Day12 < Day
     }
   end
 
-  def dijkstra(source_node, destination_node)
+  def dijkstra(source_node, destination_node, part2: false)
     dist = {}
     prev = {}
     queue = []
@@ -68,13 +68,17 @@ class Y2022Day12 < Day
         u = current if u.nil? || dist[current] < dist[u]
       end
 
-      # this is for shortest iteration
-      break if u == id(destination_node[:x], destination_node[:y])
+      if part2
+        cell = cell(u)
+        return dist[u] if nodemap[cell[:y]][cell[:x]] == 0
+      else
+        break if u == id(destination_node[:x], destination_node[:y])
+      end
 
       queue.delete(u)
 
       cell = cell(u)
-      neighbors = neighbors(cell[:x], cell[:y])
+      neighbors = neighbors(cell[:x], cell[:y], reverse: part2)
 
       neighbors.each do |v|
         if queue.include?(v)
@@ -86,6 +90,7 @@ class Y2022Day12 < Day
         end
       end
     end
+
     {
       dist: dist,
       prev: prev
@@ -106,12 +111,27 @@ class Y2022Day12 < Day
     s
   end
 
-  def neighbors(x, y)
+  def neighbors(x, y, reverse: false)
     [].tap do |res|
-      res << id(x, y + 1) if y + 1 < nodemap.count && nodemap[y+1][x] <= nodemap[y][x] + 1
-      res << id(x, y - 1) if y - 1 >= 0  && nodemap[y - 1][x] <= nodemap[y][x] + 1
-      res << id(x + 1, y)if x + 1 < nodemap[y].count && nodemap[y][x +1] <= nodemap[y][x] + 1
-      res << id(x - 1, y) if x - 1 >= 0 && nodemap[y][x - 1] <= nodemap[y][x] + 1
+      if y + 1 < nodemap.count
+        condition = !reverse ? (nodemap[y+1][x] <= nodemap[y][x] + 1) : (nodemap[y+1][x] >= nodemap[y][x] - 1)
+        res << id(x, y + 1) if condition
+      end
+
+      if y - 1 >= 0
+        condition = !reverse ? (nodemap[y - 1][x] <= nodemap[y][x] + 1) : (nodemap[y - 1][x] >= nodemap[y][x] - 1)
+        res << id(x, y - 1) if condition
+      end
+
+      if x + 1 < nodemap[y].count
+        condition = !reverse ? (nodemap[y][x +1] <= nodemap[y][x] + 1) : (nodemap[y][x +1] >= nodemap[y][x] - 1)
+        res << id(x + 1, y) if condition
+      end
+
+      if x - 1 >= 0
+        condition = !reverse ? (nodemap[y][x - 1] <= nodemap[y][x] + 1) : (nodemap[y][x - 1] >= nodemap[y][x] - 1)
+        res << id(x - 1, y) if condition
+      end
     end
   end
 
