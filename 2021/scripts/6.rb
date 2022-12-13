@@ -4,7 +4,9 @@ class Y2021Day6 < Day
   attr_accessor :fishes
   def initialize(*args, **kwargs)
     super(*args, **kwargs)
-    @fishes = data.chomp.split(',').map(&:to_i)
+    fish_array = data.chomp.split(',').map(&:to_i)
+    @fishes = Hash.new(0).merge!(fish_array.tally)
+    @fishes[FIRST_NEW_FISH_TIMER] = 0
   end
 
   FIRST_NEW_FISH_TIMER = 8
@@ -12,14 +14,12 @@ class Y2021Day6 < Day
 
   def part1
     80.times { one_day_goes_by! }
-    fishes.count
+    fishes.values.sum
   end
 
   def part2
-    binding.pry unless @stop
-    256.times do
-
-    end
+    256.times { one_day_goes_by! }
+    fishes.values.sum
   end
 
   private
@@ -30,16 +30,18 @@ class Y2021Day6 < Day
     reset_counters!
   end
 
+
   def age_fishes!
-    fishes.map! { |age| age -= 1 }
+    fishes.transform_keys! { _1 - 1 }
   end
 
   def create_fishes!
-    fishes.count(-1).times { fishes << FIRST_NEW_FISH_TIMER }
+    new_fishes_count = fishes[-1]
+    fishes[FIRST_NEW_FISH_TIMER] = new_fishes_count
   end
 
   def reset_counters!
-    fishes.map! { |age| (age < 0) ? (age % NEW_FISH_FREQ) : age }
+    fishes[-1 % NEW_FISH_FREQ] += fishes.delete(-1) if fishes[-1] > 0
   end
 
   def mode
