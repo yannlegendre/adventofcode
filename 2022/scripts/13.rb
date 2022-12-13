@@ -3,6 +3,7 @@ require_relative '../../helpers/day'
 class Y2022Day13 < Day
   attr_accessor :pairs
 
+  DIVIDER_PACKETS = [[[2]], [[6]]].freeze
   def initialize(*args, **kwargs)
     super(*args, **kwargs)
     parse_input
@@ -11,15 +12,13 @@ class Y2022Day13 < Day
   def part1
     pairs.filter_map.with_index do |pair, index|
       left, right = pair
-      left = eval(left)
-      right = eval(right)
-
       (index + 1) if compare(left, right) == -1
     end.sum
   end
 
   def part2
-
+    sorted_packets = pairs.flatten(1).concat(DIVIDER_PACKETS).sort { |a, b| compare(a, b) }
+    indices = sorted_packets.filter_map.with_index { |packet, index| index + 1 if DIVIDER_PACKETS.include?(packet) }.reduce(:*)
   end
 
   private
@@ -50,6 +49,7 @@ class Y2022Day13 < Day
 
   def parse_input
     @pairs = data.split("\n\n").map { _1.split("\n")}
+    pairs.map! { |pair| pair.map { eval(_1) }}
   end
 
   def mode
