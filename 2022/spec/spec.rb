@@ -24,6 +24,7 @@ describe 'ADVENT OF CODE 2022' do
     '11' => [10605, 2_713_310_158],
     '12' => [31, 29],
     '13' => [13, 140],
+    '14' => [24, 93],
   }
 
   EXPECTATIONS.each do |day, expected_result|
