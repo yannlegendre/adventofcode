@@ -62,4 +62,15 @@ module Grid
       grid[y][x] = '#'
     end
   end
+
+  def id(x, y)
+    (x + y * self.class::POINT_CONST)
+  end
+
+  def cell(id)
+    {
+      x: id % self.class::POINT_CONST,
+      y: id / self.class::POINT_CONST,
+    }
+  end
 end
